@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  database:
+    image: postgres:14
+    ports:
+      - target: 5432
+        published: 5444
+    restart: "unless-stopped"
+    logging:
+      driver: json-file
+      options:
+        max-size: 10mb
+        max-file: '5'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - database-data:/var/lib/postgresql/data/
+      - ./migration/docker-database-initial.sql:/docker-entrypoint-initdb.d/docker-database-initial.sql
+
+volumes:
+  database-data:
